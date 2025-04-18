@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: ryze-api
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      mkdir -p /opt/render/project/src/model
+      mkdir -p /opt/render/project/src/media
+    startCommand: gunicorn api:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: MEDIA_DIR
+        value: /opt/render/project/src/media
+      - key: MODEL_DIR
+        value: /opt/render/project/src/model
+      - key: WORKERS
+        value: 4
+    disks:
+      - name: media
+        mountPath: /opt/render/project/src/media
+        sizeGB: 1
+      - name: model
+        mountPath: /opt/render/project/src/model
+        sizeGB: 1
+    autoDeploy: true 
