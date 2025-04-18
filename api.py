@@ -654,15 +654,8 @@ def all_goals(request: UserIDRequest, db: Session = Depends(get_db)):
         "message": "Goals fetched successfully",
         "results": results}
 ###################################################################
-import joblib
-import numpy as np
-import ollama
-# Load the model
-try:
-    model = joblib.load("model/savings_predictor_model.pkl")
-except Exception as e:
-    print("Failed to load model:", e)
-    raise e
+model = None  # Removed loading of savings_predictor_model.pkl
+print("⚠️ Savings prediction model not loaded. Prediction endpoint will be unavailable.")
 # Request schema
 class FinancialData(BaseModel):
     user_id : int
